@@ -1,6 +1,11 @@
 public class FloydCell {
-    public int intermediateVertex = 0;
+    public int intermediateVertex;
     public double cost;
+
+    public FloydCell (Double initialCost) {
+        this.cost = initialCost;
+        this.intermediateVertex = 0;
+    }
 
     @Override
     public String toString () {
