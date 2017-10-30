@@ -5,8 +5,9 @@ public class Main {
 
     public static void main (String[] args) {
         MemoMatrix<Double> weights = getWeights();
+        int points = weights.getNumCols();
 
-        MemoMatrix<FloydCell> memo = new MemoMatrix<>();
+        MemoMatrix<FloydCell> memo = new MemoMatrix<>(points);
     }
 
     private static MemoMatrix<Double> getWeights () {
@@ -16,8 +17,8 @@ public class Main {
         MemoMatrix<Double> weights = new MemoMatrix<>(numPoints, numPoints);
         for (int row = 0; row < numPoints; row++) {
             for (int col = 0; col < numPoints; col++) {
-                System.out.printf("Enter edge weight from %d to %d > ", row,
-                        col);
+                System.out.printf("Enter edge weight from %d to %d > ", row + 1,
+                        col + 1);
                 double weight = stdIn.nextDouble();
                 if (weight < 0) {
                     weight = Double.POSITIVE_INFINITY;
