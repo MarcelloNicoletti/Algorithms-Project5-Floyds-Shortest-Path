@@ -1,0 +1,3 @@
+[submodule "MemoMatrix"]
+	path = MemoMatrix
+	url = git@gitlab.com:CupricWolf/Algo-MemoMatrix.git
