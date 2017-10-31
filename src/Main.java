@@ -11,9 +11,11 @@ public class Main {
         processArgs(args);
 
         MemoMatrix<Double> weights = getWeights();
-        int numPoints = weights.getNumCols();
 
         MemoMatrix<FloydCell> memo = initializeMemoFromWeights(weights);
+
+        memo.printMatrix();
+        System.out.println("D_0");
 
         doFloyds(weights, memo);
     }
@@ -21,29 +23,28 @@ public class Main {
     private static void doFloyds (MemoMatrix<Double> weights,
             MemoMatrix<FloydCell> memo) {
         int numPoints = weights.getNumCols();
-        for (int i = 0; i < numPoints; i++) {
+        for (int i = 1; i <= numPoints; i++) {
             int checkDim = i - 1;
             for (int col = 0; col < numPoints; col++) {
                 double colWeight = weights.recall(col, checkDim);
+                if (colWeight == Double.POSITIVE_INFINITY) {
+                    continue;
+                }
                 for (int row = 0; row < numPoints; row++) {
-                    if (i == 0) {
-                        FloydCell fc = new FloydCell(weights.recall(col, row));
-                        memo.memoize(col, row, fc);
-                    } else {
-                        double rowWeight = weights.recall(checkDim, row);
-                        if (rowWeight == Double.POSITIVE_INFINITY ||
-                                colWeight == Double.POSITIVE_INFINITY) {
-                            continue;
-                        }
+                    double rowWeight = weights.recall(checkDim, row);
+                    if (rowWeight == Double.POSITIVE_INFINITY) {
+                        continue;
+                    }
 
-                        FloydCell current = memo.recall(col, row);
-                        if (colWeight + rowWeight > current.cost) {
-                            current.cost = colWeight + rowWeight;
-                            current.intermediateVertex = i;
-                        }
+                    FloydCell current = memo.recall(col, row);
+                    if (colWeight + rowWeight < current.cost) {
+                        current.cost = colWeight + rowWeight;
+                        current.intermediateVertex = i;
                     }
                 }
             }
+            memo.printMatrix();
+            System.out.println("D_" + i);
         }
     }
 
