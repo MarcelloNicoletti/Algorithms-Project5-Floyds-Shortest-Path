@@ -1,10 +1,10 @@
 public class FloydCell {
-    public int intermediateVertex;
+    public int next;
     public double cost;
 
     public FloydCell (Double initialCost) {
         this.cost = initialCost;
-        this.intermediateVertex = 0;
+        this.next = 0;
     }
 
     @Override
@@ -13,6 +13,6 @@ public class FloydCell {
         if (cost == Double.POSITIVE_INFINITY) {
             costString = "–";
         }
-        return String.format("%s/%d", costString, intermediateVertex);
+        return String.format("%s/%d", costString, next);
     }
 }

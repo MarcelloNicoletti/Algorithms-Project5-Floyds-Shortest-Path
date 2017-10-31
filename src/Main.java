@@ -18,34 +18,59 @@ public class Main {
         System.out.println("D_0");
 
         doFloyds(weights, memo);
+
+        for (int i = 1; i <= weights.getNumCols(); i++) {
+            for (int j = 1; j <= weights.getNumCols(); j++) {
+                if (i != j) {
+                    System.out.print(i + " -> " + j + " : ");
+                    printShortestPath(i, j, memo);
+                    System.out.println();
+                }
+            }
+        }
     }
 
     private static void doFloyds (MemoMatrix<Double> weights,
             MemoMatrix<FloydCell> memo) {
         int numPoints = weights.getNumCols();
-        for (int i = 1; i <= numPoints; i++) {
-            int checkDim = i - 1;
-            for (int col = 0; col < numPoints; col++) {
-                double colWeight = weights.recall(col, checkDim);
-                if (colWeight == Double.POSITIVE_INFINITY) {
-                    continue;
-                }
-                for (int row = 0; row < numPoints; row++) {
-                    double rowWeight = weights.recall(checkDim, row);
-                    if (rowWeight == Double.POSITIVE_INFINITY) {
-                        continue;
-                    }
+        for (int k = 1; k <= numPoints; k++) {
+            int checkDim = k - 1;
+            for (int row = 0; row < numPoints; row++) {
+                double rowWeight = memo.recall(checkDim, row).cost;
+//                if (row == checkDim || rowWeight == Double.POSITIVE_INFINITY) {
+//                    continue;
+//                }
+                for (int col = 0; col < numPoints; col++) {
+                    double colWeight = memo.recall(col, checkDim).cost;
+//                    if (col == checkDim || colWeight == Double.POSITIVE_INFINITY) {
+//                        continue;
+//                    }
 
                     FloydCell current = memo.recall(col, row);
                     if (colWeight + rowWeight < current.cost) {
                         current.cost = colWeight + rowWeight;
-                        current.intermediateVertex = i;
+                        current.next = k;
                     }
                 }
             }
             memo.printMatrix();
-            System.out.println("D_" + i);
+            System.out.println("D_" + k);
         }
+    }
+
+    private static void printShortestPath (int start, int end,
+            MemoMatrix<FloydCell> memo) {
+        int row = start - 1;
+        int col = end - 1;
+        int next = memo.recall(col, row).next;
+        if (next == 0) {
+            if (memo.recall(col, row).cost != Double.POSITIVE_INFINITY) {
+                System.out.print(start + " -> " + end);
+            }
+            return;
+        }
+        printShortestPath(start, next, memo);
+        System.out.print(" -> " + end);
     }
 
     private static void processArgs (String[] args) {
