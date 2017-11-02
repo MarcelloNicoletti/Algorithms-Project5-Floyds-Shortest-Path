@@ -3,7 +3,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class Main {
+public class Floyd {
     private static Scanner input;
     private static boolean fileInput;
 
@@ -78,25 +78,6 @@ public class Main {
         }
     }
 
-    private static void processArgs (String[] args) {
-        if (args.length > 0) {
-            try {
-                File inputFile = new File(args[0]);
-                FileInputStream fis = new FileInputStream(inputFile);
-                input = new Scanner(fis);
-                fileInput = true;
-            } catch (FileNotFoundException e) {
-                System.out.println("Error: File " + args[0] + "not found.");
-                System.out.println("Using standard input instead.");
-                input = new Scanner(System.in);
-                fileInput = false;
-            }
-        } else {
-            input = new Scanner(System.in);
-            fileInput = false;
-        }
-    }
-
     private static MemoMatrix<FloydCell> initializeMemoFromWeights (
             MemoMatrix<Double> weights) {
         int numPoints = weights.getNumCols();
@@ -133,5 +114,24 @@ public class Main {
             }
         }
         return weights;
+    }
+
+    private static void processArgs (String[] args) {
+        if (args.length > 0) {
+            try {
+                File inputFile = new File(args[0]);
+                FileInputStream fis = new FileInputStream(inputFile);
+                input = new Scanner(fis);
+                fileInput = true;
+            } catch (FileNotFoundException e) {
+                System.out.println("Error: File " + args[0] + "not found.");
+                System.out.println("Using standard input instead.");
+                input = new Scanner(System.in);
+                fileInput = false;
+            }
+        } else {
+            input = new Scanner(System.in);
+            fileInput = false;
+        }
     }
 }

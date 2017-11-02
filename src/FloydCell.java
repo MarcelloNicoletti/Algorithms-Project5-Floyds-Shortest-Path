@@ -9,10 +9,10 @@ public class FloydCell {
 
     @Override
     public String toString () {
-        String costString = String.format("%1.2f", cost);
+        String costString = String.format("%1.0f", cost);
         if (cost == Double.POSITIVE_INFINITY) {
             costString = "–";
         }
-        return String.format("%s/%d", costString, next);
+        return String.format(" %s / %d ", costString, next);
     }
 }
