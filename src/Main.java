@@ -18,6 +18,7 @@ public class Main {
         System.out.println("D_0");
 
         doFloyds(weights, memo);
+        System.out.println("");
 
         for (int i = 1; i <= weights.getNumCols(); i++) {
             for (int j = 1; j <= weights.getNumCols(); j++) {
@@ -37,14 +38,14 @@ public class Main {
             int checkDim = k - 1;
             for (int row = 0; row < numPoints; row++) {
                 double rowWeight = memo.recall(checkDim, row).cost;
-//                if (row == checkDim || rowWeight == Double.POSITIVE_INFINITY) {
-//                    continue;
-//                }
+                if (row == checkDim || rowWeight == Double.POSITIVE_INFINITY) {
+                    continue;
+                }
                 for (int col = 0; col < numPoints; col++) {
                     double colWeight = memo.recall(col, checkDim).cost;
-//                    if (col == checkDim || colWeight == Double.POSITIVE_INFINITY) {
-//                        continue;
-//                    }
+                    if (col == checkDim || colWeight == Double.POSITIVE_INFINITY) {
+                        continue;
+                    }
 
                     FloydCell current = memo.recall(col, row);
                     if (colWeight + rowWeight < current.cost) {
