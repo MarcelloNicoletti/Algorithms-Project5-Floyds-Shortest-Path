@@ -23,8 +23,8 @@ public class Main {
             for (int j = 1; j <= weights.getNumCols(); j++) {
                 if (i != j) {
                     System.out.print(i + " -> " + j + " : ");
-                    printShortestPath(i, j, memo);
-                    System.out.println();
+                    System.out.print(memo.recall(j - 1, i - 1).cost + " : ");
+                    System.out.println(getShortestPathString(i, j, memo));
                 }
             }
         }
@@ -58,19 +58,23 @@ public class Main {
         }
     }
 
-    private static void printShortestPath (int start, int end,
+    private static String getShortestPathString (int start, int end,
             MemoMatrix<FloydCell> memo) {
-        int row = start - 1;
-        int col = end - 1;
-        int next = memo.recall(col, row).next;
+        int next = memo.recall(end - 1, start - 1).next;
         if (next == 0) {
-            if (memo.recall(col, row).cost != Double.POSITIVE_INFINITY) {
-                System.out.print(start + " -> " + end);
-            }
-            return;
+            return start + " -> " + end;
         }
-        printShortestPath(start, next, memo);
-        System.out.print(" -> " + end);
+
+        int next1 = memo.recall(next - 1, start - 1).next;
+        int next2 = memo.recall(end - 1, next - 1).next;
+        if (next1 == 0) {
+            return start + " -> " + getShortestPathString(next, end, memo);
+        } else if (next2 == 0) {
+            return getShortestPathString(start, next, memo) + " -> " + end;
+        } else {
+            return getShortestPathString(start, next1, memo) + " -> " + next +
+                    " -> " + getShortestPathString(next2, end, memo);
+        }
     }
 
     private static void processArgs (String[] args) {
